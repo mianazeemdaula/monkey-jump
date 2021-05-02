@@ -7,7 +7,8 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile1`, function (sprite, l
 scene.onOverlapTile(SpriteKind.Player, sprites.castle.tileGrass2, function (sprite, location) {
     game.over(true)
 })
-let xvalue = 0
+let score = 0
+let yvalue = 105
 scene.setBackgroundImage(img`
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -149,7 +150,6 @@ let Mono = sprites.create(img`
     . . . f d b b d d c d d f . . . 
     . . . f f f f f f f f f . . . . 
     `, SpriteKind.Player)
-controller.moveSprite(Mono, 100, 100)
 let Puppy = sprites.create(img`
     . . . . 4 4 4 . . . . 4 4 4 . . 
     . . . 4 5 5 5 e . . e 5 5 5 4 . 
@@ -166,9 +166,12 @@ let Puppy = sprites.create(img`
     . . . f 5 f f 5 f f f 5 f . . . 
     . . . f f . . f f . . f f . . . 
     `, SpriteKind.pet)
-if (xvalue <= 105) {
-    Mono.setPosition(5, xvalue)
+Mono.setPosition(5, yvalue)
+if (yvalue <= 105) {
+    controller.moveSprite(Mono, 100, 100)
+    score += 1
+    Puppy.follow(Mono, 80)
+    yvalue = Mono.y
 }
-Puppy.follow(Mono, 80)
 scene.cameraFollowSprite(Mono)
 music.playMelody("C5 G - G - A D C ", 452)
