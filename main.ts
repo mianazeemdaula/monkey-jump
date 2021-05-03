@@ -7,8 +7,14 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile1`, function (sprite, l
 scene.onOverlapTile(SpriteKind.Player, sprites.castle.tileGrass2, function (sprite, location) {
     game.over(true)
 })
-let score = 0
-let yvalue = 105
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.buttonOrange, function (sprite, location) {
+    tiles.setTileAt(location, assets.tile`transparency16`)
+    music.baDing.play()
+    info.changeScoreBy(1)
+    effects.confetti.startScreenEffect(400)
+})
+let yValue = 105
+info.setScore(0)
 scene.setBackgroundImage(img`
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -132,6 +138,22 @@ scene.setBackgroundImage(img`
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
     `)
 tiles.setTilemap(tilemap`level1`)
+let Puppy = sprites.create(img`
+    . . . . 4 4 4 . . . . 4 4 4 . . 
+    . . . 4 5 5 5 e . . e 5 5 5 4 . 
+    . . 4 5 5 5 5 5 e e 5 5 5 5 5 4 
+    . . 4 5 5 4 4 5 5 5 5 4 4 5 5 4 
+    . . e 5 4 4 5 5 5 5 5 5 4 4 5 e 
+    . . . e e 5 5 5 5 5 5 5 5 e e . 
+    . . . . e 5 f 5 5 5 5 f 5 e . . 
+    f f . . f 5 5 5 4 4 5 5 5 f . . 
+    f 5 f . f 6 5 5 f f 5 5 4 f . . 
+    f 5 5 f 4 4 6 6 6 6 6 6 f . . . 
+    . f 5 4 4 5 5 5 5 5 5 4 f . . . 
+    . . f f 5 5 4 5 5 5 5 5 f . . . 
+    . . . f 5 f f 5 f f f 5 f . . . 
+    . . . f f . . f f . . f f . . . 
+    `, SpriteKind.pet)
 let Mono = sprites.create(img`
     . . . . . . . f f f f f . . . . 
     . . . . . . f e e e e e f . . . 
@@ -150,28 +172,17 @@ let Mono = sprites.create(img`
     . . . f d b b d d c d d f . . . 
     . . . f f f f f f f f f . . . . 
     `, SpriteKind.Player)
-let Puppy = sprites.create(img`
-    . . . . 4 4 4 . . . . 4 4 4 . . 
-    . . . 4 5 5 5 e . . e 5 5 5 4 . 
-    . . 4 5 5 5 5 5 e e 5 5 5 5 5 4 
-    . . 4 5 5 4 4 5 5 5 5 4 4 5 5 4 
-    . . e 5 4 4 5 5 5 5 5 5 4 4 5 e 
-    . . . e e 5 5 5 5 5 5 5 5 e e . 
-    . . . . e 5 f 5 5 5 5 f 5 e . . 
-    f f . . f 5 5 5 4 4 5 5 5 f . . 
-    f 5 f . f 6 5 5 f f 5 5 4 f . . 
-    f 5 5 f 4 4 6 6 6 6 6 6 f . . . 
-    . f 5 4 4 5 5 5 5 5 5 4 f . . . 
-    . . f f 5 5 4 5 5 5 5 5 f . . . 
-    . . . f 5 f f 5 f f f 5 f . . . 
-    . . . f f . . f f . . f f . . . 
-    `, SpriteKind.pet)
-Mono.setPosition(5, yvalue)
-if (yvalue <= 105) {
+Mono.setPosition(20, 105)
+Puppy.setPosition(20, 105)
+Puppy.follow(Mono, 80)
+if (yValue <= 105) {
     controller.moveSprite(Mono, 100, 100)
-    score += 1
-    Puppy.follow(Mono, 80)
-    yvalue = Mono.y
 }
 scene.cameraFollowSprite(Mono)
 music.playMelody("C5 G - G - A D C ", 452)
+game.onUpdate(function () {
+    yValue += Mono.vy
+})
+game.onUpdateInterval(1000, function () {
+	
+})
